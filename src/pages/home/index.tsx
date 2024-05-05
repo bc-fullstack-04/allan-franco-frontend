@@ -1,4 +1,6 @@
 import React from 'react'
+import Button from '../../components/button'
+import Logo from '../../components/logo'
 
 export default function index() {
   return (
@@ -6,12 +8,12 @@ export default function index() {
         <main className='flex flex-col absolute w-screen h-screen bg-neutral-950 bg-opacity-50'>
           <nav className='flex flex-row items-center justify-between w-full bg-white bg-opacity-30 py-3 px-24'>
             <div className='flex items-center'>
-              <div className="h-10 w-10 bg-logo bg-no-repeat bg-contain"></div>
+              <Logo />
               <h1 className='text-white text-xl'>BootPlay</h1>
             </div>
             <div className='flex w-96 gap-4'>
-              <button className='bg-neutral-950 text-white font-semibold py-2 px-8 rounded-3xl'>Entrar</button>
-              <button className='bg-sky-200 font-semibold py-2 px-8 rounded-3xl'>Inscrever-se</button>
+              <Button color={"bg-neutral-950"} textColor={"text-white"} bold={"font-semibold"}>Entrar</Button>
+              <Button color={"bg-sky-200"} bold={"font-semibold"}>Inscrever-se</Button>
             </div>
           </nav>
 
@@ -20,7 +22,9 @@ export default function index() {
               <h1 className='text-5xl font-bold text-white'>A Historia da música não pode ser esquecida!</h1>
               <span className='text-white'>Crie já sua conta e curta os sucessos que marcaram os tempos no Vinil.</span>
             </div>
-            <button className='bg-sky-200 font-semibold py-3 px-12 w-fit rounded-3xl'>Inscrever-se</button>
+            <div>
+              <Button color={"bg-sky-200"} bold={"font-semibold"} sizeWidth={"py-3"} sizeHeight={"px-12"}>Inscrever-se</Button>
+            </div>
           </section>
         </main>
     </div>
