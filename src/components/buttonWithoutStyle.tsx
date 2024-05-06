@@ -2,13 +2,14 @@ import React from 'react'
 
 interface Props {
   children: React.ReactNode;
-  underline?: Boolean
+  underline?: Boolean;
+  textColor?: String;
 }
 
-export default function buttonWithoutStyle({ children, underline } : Props) {
+export default function buttonWithoutStyle({ children, underline, textColor = "text-zinc-900" } : Props) {
   return (
     <>
-      <button className={`text-zinc-900 font-semibold ${underline ? 'underline' : ''}`}>{children}</button>
+      <button className={`${textColor} font-semibold ${underline ? 'underline' : ''} hover:text-zinc-800 transition duration-200`}>{children}</button>
     </>
   )
 }

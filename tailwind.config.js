@@ -18,9 +18,11 @@ module.exports = {
     },
     extend: {
       backgroundImage: {
-        'background': "url('src/assets/Background.jpg')",
-        'logo': "url('src/assets/Logo.png')",
-        'close': "url('src/assets/Close.png')"
+        'backgroundGeneral': "url('src/assets/background_general.jpg')",
+        'logo': "url('src/assets/Logo.png')"
+      },
+      boxShadow: {
+        'cards': "0px 3.17px 19.04px 0px #BDBDBD3B"
       },
       colors: {
         border: "hsl(var(--border))",
