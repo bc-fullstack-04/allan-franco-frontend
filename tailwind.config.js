@@ -18,8 +18,9 @@ module.exports = {
     },
     extend: {
       backgroundImage: {
-        'background': "url('src/assets/background.jpg')",
-        'logo': "url('src/assets/logo.png')"
+        'background': "url('src/assets/Background.jpg')",
+        'logo': "url('src/assets/Logo.png')",
+        'close': "url('src/assets/Close.png')"
       },
       colors: {
         border: "hsl(var(--border))",
@@ -77,5 +78,7 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate")
+  ]
 }
