@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonWithStyle from "../../components/buttonWithStyle";
+import LinkWithStyle from "../../components/linkWithStyle";
 import Logo from "../../components/logo";
 
 export default function index() {
@@ -9,25 +9,25 @@ export default function index() {
       {/* MAIN / BODY */}
       <main className="flex flex-col absolute w-screen h-screen bg-neutral-950 bg-opacity-50">
         {/* TOPBAR */}
-        <nav className="flex flex-row items-center justify-between w-full bg-white bg-opacity-30 backdrop-blur-lg py-3 px-16">
+        <nav className="flex flex-row items-center justify-between w-full bg-white bg-opacity-30 backdrop-blur-lg py-3 px-4 lg:px-16">
           {/* LOGO && TITLE */}
           <div className="flex items-center">
             <Logo />
-            <h1 className="text-white text-xl">BootPlay</h1>
+            <h1 className="text-white text-md md:text-xl">BootPlay</h1>
           </div>
 
           {/* ACTION BUTTONS */}
           <div className="flex justify-end w-96 gap-4">
-            <ButtonWithStyle bold={"font-semibold"}>Entrar</ButtonWithStyle>
-            <ButtonWithStyle color={"bg-sky-200"} textColor={"text-black"} bold={"font-semibold"} hover={"hover:bg-sky-100"}>Inscrever-se</ButtonWithStyle>
+            <LinkWithStyle path="/sign-in">Entrar</LinkWithStyle>
+            <LinkWithStyle path="/sign-up" color="bg-sky-200" textColor="text-black" hover="hover:bg-sky-100">Inscrever-se</LinkWithStyle>
           </div>
         </nav>
 
         {/* CONTENT */}
-        <section className="flex flex-col h-full justify-center gap-8 p-24">
+        <section className="flex flex-col h-full justify-center gap-8 px-16">
           {/* TEXT */}
-          <div className="flex flex-col w-2/6 gap-8">
-            <h1 className="text-5xl font-bold text-white">
+          <div className="flex flex-col w-full lg:w-[50%] md:w-[75%] gap-8">
+            <h1 className="text-5xl font-bold text-white leading-tight">
               A história da música não pode ser esquecida!
             </h1>
             <span className="text-white">
@@ -38,7 +38,7 @@ export default function index() {
 
           {/* ACTION BUTTON */}
           <div>
-            <ButtonWithStyle color={"bg-sky-200"} textColor={"text-black"} bold={"font-semibold"} sizeWidth={"py-3"} sizeHeight={"px-12"} hover={"hover:bg-sky-100"}>Inscrever-se</ButtonWithStyle>
+            <LinkWithStyle path="/sign-up" color="bg-sky-200" textSize="text-lg md:text-xl" textColor="text-black" sizeWidth="px-12" sizeHeight="py-3" hover="hover:bg-sky-100">Inscrever-se</LinkWithStyle>
           </div>
         </section>
       </main>

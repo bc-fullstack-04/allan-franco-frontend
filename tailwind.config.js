@@ -19,7 +19,7 @@ module.exports = {
     extend: {
       backgroundImage: {
         'backgroundGeneral': "url('src/assets/background_general.jpg')",
-        'logo': "url('src/assets/Logo.png')"
+        'logo': "url('src/assets/logo.png')"
       },
       boxShadow: {
         'cards': "0px 3.17px 19.04px 0px #BDBDBD3B"

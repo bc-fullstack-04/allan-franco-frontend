@@ -1,8 +1,12 @@
 import React from "react";
+
+import CloseButton from '../../assets/close.png';
+
 import Logo from "../../components/logo";
 import Input from "../../components/input";
 import ButtonWithStyle from "../../components/buttonWithStyle";
-import ButtonWithoutStyle from "../../components/buttonWithoutStyle";
+import LinkWithoutStyle from "../../components/linkWithoutStyle";
+import { Link } from "react-router-dom";
 
 export default function index() {
   return (
@@ -11,8 +15,12 @@ export default function index() {
       {/* MAIN / BODY */}
       <main className="flex flex-col absolute w-screen h-screen backdrop-brightness-50 backdrop-blur-sm">
         <section className="flex flex-row items-center justify-center h-full w-full">
-          {/* BASE CONTENT */}
-          <div className="flex flex-col items-center justify-center bg-white w-[420px] h-fit rounded-3xl shadow-lg px-12 py-4">
+          {/* CONTENT */}
+          <div className="flex flex-col items-center justify-center relative bg-white w-[420px] h-fit rounded-3xl shadow-lg px-12 py-4">
+            {/* CLOSE BUTTON */}
+            <div className="flex items-center justify-end w-full h-fit">
+              <Link to="/" className="absolute top-0 right-0 p-4"><img src={CloseButton} alt="Close Button" className="p-1 bg-zinc-50 hover:bg-zinc-100 rounded-full" /></Link>
+            </div>
             {/* TITLE */}
             <div className="flex flex-col items-center gap-2 w-full py-6">
               <Logo />
@@ -30,13 +38,14 @@ export default function index() {
               <Input type="password" required>
                 Password
               </Input>
-              <ButtonWithStyle full sizeHeight={"py-3"}>Criar conta</ButtonWithStyle>
+              <ButtonWithStyle>Criar conta</ButtonWithStyle>
             </form>
 
             {/* FOOTER */}
             <div>
               <p className="text-sm text-zinc-500">
-                Já tem uma conta? <ButtonWithoutStyle underline>Entrar</ButtonWithoutStyle>
+                Já tem uma conta?{" "}
+                <LinkWithoutStyle path="/sign-in" underline>Entrar</LinkWithoutStyle>
               </p>
             </div>
           </div>
