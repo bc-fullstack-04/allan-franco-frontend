@@ -1,6 +1,5 @@
-import React from "react";
-import LinkWithStyle from "../../components/linkWithStyle";
-import Logo from "../../components/logo";
+import LinkWithStyle from "@/components/linkWithStyle";
+import Logo from "@/components/logo";
 
 export default function index() {
   return (

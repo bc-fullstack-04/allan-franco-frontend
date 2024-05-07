@@ -1,16 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import LinkWithoutStyle from "../../components/linkWithoutStyle";
-import Logo from "../../components/logo";
-import SearchIcon from "../../assets/searchIcon.svg";
+import { album_api } from '@/services/apiServices';
+
+import LinkWithoutStyle from "@/components/linkWithoutStyle";
+import Logo from "@/components/logo";
+import SearchIcon from "@/assets/searchIcon.svg";
+import { albumModel } from "@/models/albumModel";
+
+// SHADCN CAROUSEL
+import Autoplay from "embla-carousel-autoplay"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 
 export default function index() {
+  const [albums, setAlbums] = useState<albumModel[]>([]);
+
+  const plugin = React.useRef(Autoplay({ delay: 5000, stopOnInteraction: false }));
+
+  useEffect(() => {
+    album_api.defaults.headers.common.Authorization = "Basic dGVzdDokMmEkMTAkRUJmVThDSmx2SVNDZ2thYS5td1hFdUYydWJvRDZON29peXNOS0xaSy5IcWI0ZVg1LnIzLzI";
+    album_api.get("albums/all?search=Rock")
+      .then(resp => {
+          setAlbums(resp.data);
+    })
+  }, []);
+
+  function handleLink(url: string) {
+    window.open(url, '_blank');
+  }
+
   return (
+    // MAIN / BODY
     <div className="flex flex-col h-screen w-screen">
-      {/* BACKGROUND IMAGE DIV ONLY */}
-      <div className="flex w-full h-full -mb-14 bg-[url('./assets/background_profile.jpg')] bg-cover bg-center bg-no-repeat">
+      {/* CONTENT + TOPBAR + HEADER */}
+      <div className="flex w-full h-[120%] bg-[url('./assets/background_profile.jpg')] bg-cover bg-no-repeat">
         {/* MAIN / BODY */}
         <main className="flex flex-col w-full h-full bg-neutral-950 bg-opacity-50">
+          
           {/* TOPBAR */}
           <nav className="flex flex-row items-center justify-between w-full bg-white bg-opacity-30 backdrop-blur-sm py-3 px-16">
             {/* LOGO && TITLE */}
@@ -46,25 +77,53 @@ export default function index() {
         </main>
       </div>
 
-      <div className="flex flex-col justify-center gap-4 w-full h-full bg-gradient-to-t from-[#19181F] from-90%">
-        <div className="flex justify-center items-center w-full">
-          <div className="flex items-center justify-end">
-            <input
-              type="text"
-              className="bg-[#19181F] ring-1 ring-white text-white hover:ring-2 focus:ring-2 focus:outline-none rounded-md w-96 p-2 pr-14"
-            />
-            <img src={SearchIcon} className="absolute p-4"></img>
+      {/* SEARCH BAR + ALBUMS */}
+      <div className="flex items-center justify-center -mt-12 w-full h-full bg-gradient-to-t from-[#19181F] from-90%">
+        <div className="flex flex-col justify-end gap-4 w-full h-full px-16 py-4">
+        
+          {/* SEARCH BAR */}
+          <div className="flex justify-center items-center w-full">
+            <div className="flex items-center justify-end h-full">
+              <input
+                type="text"
+                className="bg-[#19181F] ring-1 ring-white text-white hover:ring-2 focus:ring-2 focus:outline-none rounded-md w-96 p-2 pr-14"
+                placeholder="Procure algo..."
+              />
+              <img src={SearchIcon} className="absolute p-4"></img>
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col justify-center px-20 gap-4">
-          <h1 className="text-5xl text-white">Trends</h1>
-          {/* Card */}
-          <div className="flex h-56 w-56 items-center justify-center backdrop-brightness-50 p-6 rounded-sm shadow-cards">
-            <h1 className="text-3xl font-semibold text-center text-white">
-              Teste
-            </h1>
+
+          {/* ALBUMS */}
+          <div className="flex flex-col gap-4">
+            <h1 className="text-4xl text-white">Trends</h1>
+            {/* CAROUSEL */}
+            <div className="flex w-full items-center justify-center">
+              <Carousel
+                plugins={[plugin.current]}
+                className="w-full"
+                onMouseEnter={plugin.current.stop}
+                onMouseLeave={plugin.current.reset}
+              >
+                <CarouselContent className="flex gap-3">
+                  { albums?.map((album, i) => (
+                    <CarouselItem key={i} className="basis-1/4 p-3">
+                      <div
+                          key={i}
+                          style={{'--bg-wallpaperAlbum': `url(${album.images[0].url})`} as React.CSSProperties}
+                          className='flex aspect-square bg-[image:var(--bg-wallpaperAlbum)] bg-center bg-cover bg-no-repeat rounded-md shadow-[0_3px_19px_0_rgba(255,255,255,0.1)]'
+                      >
+                        <div onClick={() => handleLink(album.externalUrls.externalUrls.spotify)} className='flex h-full w-full items-center justify-center bg-neutral-950 bg-opacity-30 p-6'>
+                            <h1 className="text-2xl font-semibold uppercase text-center text-white">{album.name}</h1>
+                        </div>
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
+            </div>
           </div>
-          {/* Card */}
         </div>
       </div>
     </div>

@@ -1,11 +1,9 @@
-import React from "react";
+import CloseButton from '@/assets/close.png';
 
-import CloseButton from '../../assets/close.png';
-
-import Logo from "../../components/logo";
-import Input from "../../components/input";
-import ButtonWithStyle from "../../components/buttonWithStyle";
-import LinkWithoutStyle from "../../components/linkWithoutStyle";
+import Logo from "@/components/logo";
+import Input from "@/components/input";
+import ButtonWithStyle from "@/components/buttonWithStyle";
+import LinkWithoutStyle from "@/components/linkWithoutStyle";
 import { Link } from "react-router-dom";
 
 export default function index() {
