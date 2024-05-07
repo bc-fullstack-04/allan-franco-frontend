@@ -26,10 +26,10 @@ export default function index() {
         <section className="flex flex-col h-full justify-center gap-8 px-16">
           {/* TEXT */}
           <div className="flex flex-col w-full lg:w-[50%] md:w-[75%] gap-8">
-            <h1 className="text-5xl font-bold text-white leading-tight">
+            <h1 className="text-5xl font-bold text-white leading-tight drop-shadow-[-1px_1px_0_rgb(0,0,0)]">
               A história da música não pode ser esquecida!
             </h1>
-            <span className="text-white">
+            <span className="text-white drop-shadow-[-1px_1px_0_rgb(0,0,0)]">
               Crie já sua conta e curta os sucessos que marcaram os tempos no
               vinil.
             </span>

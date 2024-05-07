@@ -20,7 +20,7 @@ import {
 export default function index() {
   const [albums, setAlbums] = useState<albumModel[]>([]);
 
-  const plugin = React.useRef(Autoplay({ delay: 5000, stopOnInteraction: false }));
+  const plugin = React.useRef(Autoplay({ delay: 4000, stopOnInteraction: false }));
 
   useEffect(() => {
     album_api.defaults.headers.common.Authorization = "Basic dGVzdDokMmEkMTAkRUJmVThDSmx2SVNDZ2thYS5td1hFdUYydWJvRDZON29peXNOS0xaSy5IcWI0ZVg1LnIzLzI";
@@ -38,12 +38,12 @@ export default function index() {
     // MAIN / BODY
     <div className="flex flex-col h-screen w-screen">
       {/* CONTENT + TOPBAR + HEADER */}
-      <div className="flex w-full h-[120%] bg-[url('./assets/background_profile.jpg')] bg-cover bg-no-repeat">
+      <div className="flex w-full h-[150%] bg-[url('./assets/background_profile.jpg')] bg-center bg-cover bg-no-repeat">
         {/* MAIN / BODY */}
         <main className="flex flex-col w-full h-full bg-neutral-950 bg-opacity-50">
           
           {/* TOPBAR */}
-          <nav className="flex flex-row items-center justify-between w-full bg-white bg-opacity-30 backdrop-blur-sm py-3 px-16">
+          <nav className="flex flex-row items-center justify-between w-full bg-white bg-opacity-30 backdrop-blur-sm py-3 px-4 lg:px-16">
             {/* LOGO && TITLE */}
             <div className="flex items-center">
               <Logo />
@@ -51,7 +51,7 @@ export default function index() {
             </div>
 
             {/* ACTION BUTTONS */}
-            <div className="flex items-center justify-end w-96 gap-8">
+            <div className="flex items-center justify-end w-96 gap-2 sm:gap-8">
               <LinkWithoutStyle path="" textColor="text-white" hover={true}>
                 Meus Discos
               </LinkWithoutStyle>
@@ -65,11 +65,11 @@ export default function index() {
           {/* CONTENT */}
           <section className="flex flex-col h-full justify-center gap-8 p-8">
             {/* TEXT */}
-            <div className="flex flex-col w-[450px] gap-8">
-              <h1 className="text-4xl font-bold text-white">
+            <div className="flex flex-col xl:w-[40%] 75% gap-8">
+              <h1 className="text-4xl font-bold text-white drop-shadow-[-1px_1px_0_rgb(0,0,0)]">
                 A história da música não pode ser esquecida!
               </h1>
-              <span className="text-white">
+              <span className="text-white drop-shadow-[-1px_1px_0_rgb(0,0,0)]">
                 Sucessos que marcaram o tempo!!!
               </span>
             </div>
@@ -78,11 +78,11 @@ export default function index() {
       </div>
 
       {/* SEARCH BAR + ALBUMS */}
-      <div className="flex items-center justify-center -mt-12 w-full h-full bg-gradient-to-t from-[#19181F] from-90%">
-        <div className="flex flex-col justify-end gap-4 w-full h-full px-16 py-4">
+      <div className="flex justify-center -mt-20 w-full h-full bg-gradient-to-t from-[#19181F] from-90%">
+        <div className="flex flex-col justify-center gap-8 w-[85%] sm:w-[70%] px-16 py-4">
         
           {/* SEARCH BAR */}
-          <div className="flex justify-center items-center w-full">
+          <div className="flex justify-center items-center w-full md:mt-10">
             <div className="flex items-center justify-end h-full">
               <input
                 type="text"
@@ -104,16 +104,16 @@ export default function index() {
                 onMouseEnter={plugin.current.stop}
                 onMouseLeave={plugin.current.reset}
               >
-                <CarouselContent className="flex gap-3">
+                <CarouselContent className="">
                   { albums?.map((album, i) => (
-                    <CarouselItem key={i} className="basis-1/4 p-3">
+                    <CarouselItem key={i} className="basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
                       <div
                           key={i}
                           style={{'--bg-wallpaperAlbum': `url(${album.images[0].url})`} as React.CSSProperties}
-                          className='flex aspect-square bg-[image:var(--bg-wallpaperAlbum)] bg-center bg-cover bg-no-repeat rounded-md shadow-[0_3px_19px_0_rgba(255,255,255,0.1)]'
+                          className='flex aspect-square w-30 bg-[image:var(--bg-wallpaperAlbum)] bg-center bg-cover bg-no-repeat rounded-md shadow-[0_3px_19px_0_rgba(255,255,255,0.1)]'
                       >
-                        <div onClick={() => handleLink(album.externalUrls.externalUrls.spotify)} className='flex h-full w-full items-center justify-center bg-neutral-950 bg-opacity-30 p-6'>
-                            <h1 className="text-2xl font-semibold uppercase text-center text-white">{album.name}</h1>
+                        <div onClick={() => handleLink(album.externalUrls.externalUrls.spotify)} className='flex h-full w-full items-center justify-center bg-neutral-950 bg-opacity-30 p-2'>
+                            <h1 className="text-lg lg:text-2xl font-semibold uppercase text-center text-white">{album.name}</h1>
                         </div>
                       </div>
                     </CarouselItem>
