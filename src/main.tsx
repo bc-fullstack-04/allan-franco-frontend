@@ -15,7 +15,7 @@ import { Toaster } from 'react-hot-toast'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.Fragment>
-    <Toaster position='top-right' toastOptions={{ duration: 2000 }} />
+    <Toaster position='bottom-right' toastOptions={{ duration: 2000 }} />
     <AuthProvider>
       <BrowserRouter>
         <Routes>

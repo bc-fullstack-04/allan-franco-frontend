@@ -58,10 +58,11 @@ export default function index() {
     setTimeout(() => {
       navigate('/');
       toast.success('Logout efetuado com sucesso!');
-    }, 2000)
+      }, 2000)
     }).catch(() => {
       toast.error('Erro ao sair. Tente novamente mais tarde!')
     })
+  
   }
 
   function handleLink(url: string) {
@@ -99,7 +100,7 @@ export default function index() {
                 <DropdownMenuContent>
                   <DropdownMenuLabel>Logado como </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={()=>handleLogout()}>
+                  <DropdownMenuItem className="cursor-pointer" onClick={()=>handleLogout()}>
                     <img src={LogoutIcon} className="mr-2 h-4 w-4" />
                     <span>Sair</span>
                   </DropdownMenuItem>
