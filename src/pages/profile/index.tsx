@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 
 import { album_api } from '@/services/apiServices';
+import { albumModel } from "@/models/albumModel";
+import { useAuth } from "@/context/authContext";
 
 import LinkWithoutStyle from "@/components/linkWithoutStyle";
 import Logo from "@/components/logo";
-import SearchIcon from "@/assets/searchIcon.svg";
-import { albumModel } from "@/models/albumModel";
+
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 // SHADCN CAROUSEL
 import Autoplay from "embla-carousel-autoplay"
@@ -17,8 +20,26 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 
+// SHADCN DROPDOWN MENU
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+import SearchIcon from "@/assets/searchIcon.svg";
+import LogoutIcon from "@/assets/logoutIcon.svg";
+
+
+
 export default function index() {
   const [albums, setAlbums] = useState<albumModel[]>([]);
+
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const plugin = React.useRef(Autoplay({ delay: 4000, stopOnInteraction: false }));
 
@@ -29,6 +50,19 @@ export default function index() {
           setAlbums(resp.data);
     })
   }, []);
+
+  async function handleLogout(){
+    toast.loading('Saindo...')
+
+    logout().then(() => {
+    setTimeout(() => {
+      navigate('/');
+      toast.success('Logout efetuado com sucesso!');
+    }, 2000)
+    }).catch(() => {
+      toast.error('Erro ao sair. Tente novamente mais tarde!')
+    })
+  }
 
   function handleLink(url: string) {
     window.open(url, '_blank');
@@ -58,7 +92,20 @@ export default function index() {
               <LinkWithoutStyle path="" textColor="text-white" hover={true}>
                 Carteira
               </LinkWithoutStyle>
-              <button className="bg-[url('./assets/logo_profile.jpg')] bg-no-repeat bg-cover w-[50px] h-[50px] rounded-full"></button>
+
+              {/* DROPDOWN TOPZERA */}
+              <DropdownMenu>
+                <DropdownMenuTrigger className="bg-[url('./assets/logo_profile.jpg')] bg-no-repeat bg-cover w-[50px] h-[50px] rounded-full"></DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>Logado como </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={()=>handleLogout()}>
+                    <img src={LogoutIcon} className="mr-2 h-4 w-4" />
+                    <span>Sair</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              {/* DROPDOWN TOPZERA */}
             </div>
           </nav>
 
@@ -79,7 +126,7 @@ export default function index() {
 
       {/* SEARCH BAR + ALBUMS */}
       <div className="flex justify-center -mt-20 w-full h-full bg-gradient-to-t from-[#19181F] from-90%">
-        <div className="flex flex-col justify-center gap-8 w-[85%] sm:w-[70%] px-16 py-4">
+        <div className="flex flex-col justify-center gap-8 w-full sm:w-[70%] px-16 py-4">
         
           {/* SEARCH BAR */}
           <div className="flex justify-center items-center w-full md:mt-10">

@@ -1,12 +1,11 @@
 import { user_api } from "@/services/apiServices";
 import { UserModel } from "@/models/userModel";
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { createContext, useCallback, useContext, useState } from "react";
 
 interface AuthContextModel extends UserModel {
     isAuthenticated: boolean;
     login: (email: string, password: string) => Promise<string | void>;
-    logout: () => void;
+    logout: () => Promise<void>;
 }
 
 interface Props {
@@ -36,8 +35,8 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         localStorage.setItem('@Auth.Data', JSON.stringify(respUserInfo.data));
     }, []);
 
-    const Logout = useCallback(() => {
-        localStorage.removeItem('@Auth.data');
+    const Logout = useCallback(async () => {
+        localStorage.removeItem('@Auth.Data');
         setUserData(undefined);
     }, []);
     
