@@ -103,7 +103,7 @@ export default function index() {
               <DropdownMenu>
                 <DropdownMenuTrigger className="bg-[url('./assets/logo_profile.jpg')] bg-no-repeat bg-cover w-[50px] h-[50px] rounded-full"></DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  {users?.name && (<DropdownMenuLabel>Logado como  {users.name} </DropdownMenuLabel>)}
+                  {users?.name && (<DropdownMenuLabel>{users.name} </DropdownMenuLabel>)}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="cursor-pointer" onClick={()=>handleLogout()}>
                     <img src={LogoutIcon} className="mr-2 h-4 w-4" />

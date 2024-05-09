@@ -4,7 +4,9 @@ import { createContext, useCallback, useContext, useState } from "react";
 
 interface AuthContextModel extends userModel {
     isAuthenticated: boolean;
+    createdEmail?: string;
     login: (email: string, password: string) => Promise<string | void>;
+    register: (name: string, email: string, password: string) => Promise<string | void>;
     logout: () => Promise<void>;
 }
 
@@ -16,16 +18,17 @@ interface Props {
 export const AuthProvider: React.FC<Props> = ({ children }) => {
     const [userData, setUserData] = useState<userModel>();
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [createdEmail, setCreatedEmail] = useState("");
 
     const Login = useCallback(async (email: string, password: string) => {
-        const respAuth = await user_api.post('/users/auth', {email, password});
+        const respAuth = await user_api.post('/auth', {email, password});
         
         if(respAuth instanceof Error){
             return respAuth.message;
         }
         
         user_api.defaults.headers.common.Authorization = `Basic ${respAuth.data.token}`;
-        const respUserInfo = await user_api.get(`users/${respAuth.data.id}`);
+        const respUserInfo = await user_api.get(`/${respAuth.data.id}`);
 
         if(respUserInfo instanceof Error){
             return respUserInfo.message;
@@ -35,6 +38,16 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         localStorage.setItem('@Auth.Data', JSON.stringify(respUserInfo.data));
         localStorage.setItem('@Auth.Token', `Basic ${respAuth.data.token}`);
         setIsAuthenticated(true)
+    }, []);
+
+    const Register = useCallback(async (name: string, email: string, password: string) => {
+        const respAuth = await user_api.post('/create', {name, email, password});
+
+        if(respAuth instanceof Error){
+            return respAuth.message;
+        }
+
+        setCreatedEmail(email);
     }, []);
 
     const Logout = useCallback(async () => {
@@ -47,7 +60,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     }, []);
     
     return (
-        <AuthContext.Provider value={{ isAuthenticated: !! userData, ...userData, login: Login, logout: Logout}}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={{ isAuthenticated: !! userData, ...userData, createdEmail: createdEmail , login: Login, register: Register, logout: Logout}}>{children}</AuthContext.Provider>
     )
 }
 

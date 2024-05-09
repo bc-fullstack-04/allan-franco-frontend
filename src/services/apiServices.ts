@@ -5,5 +5,5 @@ export const album_api = axios.create({
 })
 
 export const user_api = axios.create({
-    baseURL: 'http://localhost:8081/api'
+    baseURL: 'http://localhost:8081/api/users'
 })

@@ -13,12 +13,13 @@ import toast from 'react-hot-toast';
 import { useAuth } from '@/context/authContext';
 
 export default function index() {
-  const [email, setEmail] = useState("");
+  const { login, createdEmail } = useAuth();
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState(createdEmail || "");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { login } = useAuth();
-  const navigate = useNavigate();
 
   async function handleLogin(e: FormEvent){
     e.preventDefault();
@@ -32,7 +33,7 @@ export default function index() {
         setIsSubmitting(false)
       }, 2000)
     }).catch(() => {
-      toast.error('Erro ao efetuar login!');
+      toast.error('Erro ao efetuar o login!');
       setIsSubmitting(false)
     });
   }
@@ -58,7 +59,7 @@ export default function index() {
 
             {/* FORMS */}
             <form onSubmit={handleLogin} className="flex flex-col relative items-center mb-8 gap-4 w-full">
-              <Input onChange={e => setEmail(e.target.value)} type="email" required>E-mail</Input>
+              <Input onChange={e => setEmail(e.target.value)} type="email" value={email} required>E-mail</Input>
               <Input onChange={e => setPassword(e.target.value)} type="password" required>Password</Input>
               <ButtonWithStyle disabled={isSubmitting}>{isSubmitting ? (
                 <span className="flex items-center justify-center gap-2">
