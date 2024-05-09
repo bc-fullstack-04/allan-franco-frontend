@@ -17,7 +17,6 @@ interface Props {
 
 export const AuthProvider: React.FC<Props> = ({ children }) => {
     const [userData, setUserData] = useState<userModel>();
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [createdEmail, setCreatedEmail] = useState("");
 
     const Login = useCallback(async (email: string, password: string) => {
@@ -37,7 +36,6 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         setUserData(respUserInfo.data);
         localStorage.setItem('@Auth.Data', JSON.stringify(respUserInfo.data));
         localStorage.setItem('@Auth.Token', `Basic ${respAuth.data.token}`);
-        setIsAuthenticated(true)
     }, []);
 
     const Register = useCallback(async (name: string, email: string, password: string) => {
@@ -53,14 +51,12 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     const Logout = useCallback(async () => {
         localStorage.removeItem('@Auth.Data');
         localStorage.removeItem('@Auth.Token');
-        setUserData(undefined);
-        setIsAuthenticated(false);
         user_api.defaults.headers.common.Authorization = null;
         album_api.defaults.headers.common.Authorization = null;
     }, []);
     
     return (
-        <AuthContext.Provider value={{ isAuthenticated: !! userData, ...userData, createdEmail: createdEmail , login: Login, register: Register, logout: Logout}}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={{ isAuthenticated: !! localStorage.getItem('@Auth.Data'), createdEmail: createdEmail , login: Login, register: Register, logout: Logout}}>{children}</AuthContext.Provider>
     )
 }
 

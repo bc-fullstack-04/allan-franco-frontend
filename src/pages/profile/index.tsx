@@ -43,7 +43,7 @@ export default function index() {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  const plugin = React.useRef(Autoplay({ delay: 4000, stopOnInteraction: false }));
+  const plugin = React.useRef(Autoplay({ delay: 4000, stopOnInteraction: true }));
 
   useEffect(() => {
     const userStorageData = localStorage.getItem('@Auth.Data');
@@ -103,7 +103,7 @@ export default function index() {
               <DropdownMenu>
                 <DropdownMenuTrigger className="bg-[url('./assets/logo_profile.jpg')] bg-no-repeat bg-cover w-[50px] h-[50px] rounded-full"></DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  {users?.name && (<DropdownMenuLabel>{users.name} </DropdownMenuLabel>)}
+                  {users?.name && (<DropdownMenuLabel className="capitalize">{users.name} </DropdownMenuLabel>)}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="cursor-pointer" onClick={()=>handleLogout()}>
                     <img src={LogoutIcon} className="mr-2 h-4 w-4" />
@@ -165,8 +165,8 @@ export default function index() {
                           style={{'--bg-wallpaperAlbum': `url(${album.images[0].url})`} as React.CSSProperties}
                           className='flex aspect-square w-30 bg-[image:var(--bg-wallpaperAlbum)] bg-center bg-cover bg-no-repeat rounded-md shadow-[0_3px_19px_0_rgba(255,255,255,0.1)]'
                       >
-                        <div onClick={() => handleLink(album.externalUrls.externalUrls.spotify)} className='flex relative h-full w-full items-center justify-center bg-neutral-950 bg-opacity-50 p-2'>
-                            <h1 className="text-center text-lg font-semibold uppercase text-white">{album.name}</h1>
+                        <div onClick={() => handleLink(album.externalUrls.externalUrls.spotify)} className='flex flex-col relative h-full w-full items-center justify-center text-center bg-neutral-950 bg-opacity-50'>
+                            <h1 className="text-lg text-center line-clamp-3 font-semibold uppercase text-white">{album.name}</h1>
                             <span className="absolute bottom-0 right-0 text-lg text-white p-2">R$ {album.value}</span>
                         </div>
                       </div>
