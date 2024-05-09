@@ -20,7 +20,6 @@ export default function index() {
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-
   async function handleLogin(e: FormEvent){
     e.preventDefault();
     setIsSubmitting(true);
