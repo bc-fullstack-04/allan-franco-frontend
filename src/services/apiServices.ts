@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const album_api = axios.create({
-    baseURL: 'http://localhost:8082/api'
+    baseURL: 'http://localhost:8082/api/albums'
 })
 
 export const user_api = axios.create({

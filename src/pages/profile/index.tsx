@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import { album_api } from '@/services/apiServices';
+// import { album_api } from '@/services/apiServices';
 import { albumModel } from "@/models/albumModel";
 import { userModel } from "@/models/userModel";
 import { useAuth } from "@/context/authContext";
+import { useAlbums } from "@/context/albumContext";
 
 import LinkWithoutStyle from "@/components/linkWithoutStyle";
 import Logo from "@/components/logo";
@@ -34,27 +35,26 @@ import {
 import SearchIcon from "@/assets/searchIcon.svg";
 import LogoutIcon from "@/assets/logoutIcon.svg";
 
-
-
 export default function index() {
   const [albums, setAlbums] = useState<albumModel[]>([]);
   const [users, setUser] = useState<userModel>();
+  const [searchingAlbums, setSearchingAlbums] = useState(false);
 
   const { logout } = useAuth();
+  const { searchAlbums } = useAlbums();
   const navigate = useNavigate();
 
-  const plugin = React.useRef(Autoplay({ delay: 4000, stopOnInteraction: true }));
+  const plugin = React.useRef(Autoplay({ delay: 4000, stopOnInteraction: false }));
 
   useEffect(() => {
-    const userStorageData = localStorage.getItem('@Auth.Data');
-    setUser(userStorageData!=null ? JSON.parse(userStorageData) : null);
-
-    album_api.defaults.headers.common.Authorization = localStorage.getItem('@Auth.Token');
-    album_api.get("albums/all?search=Rock")
-      .then(resp => {
-          setAlbums(resp.data);
-    })
+    handleAlbums();
   }, []);
+
+  async function handleAlbums(){
+    await searchAlbums("Rock").then((results) => {
+      setAlbums(results);
+    });
+  }
 
   async function handleLogout(){
     toast.loading('Saindo...')
@@ -165,7 +165,7 @@ export default function index() {
                           style={{'--bg-wallpaperAlbum': `url(${album.images[0].url})`} as React.CSSProperties}
                           className='flex aspect-square w-30 bg-[image:var(--bg-wallpaperAlbum)] bg-center bg-cover bg-no-repeat rounded-md shadow-[0_3px_19px_0_rgba(255,255,255,0.1)]'
                       >
-                        <div onClick={() => handleLink(album.externalUrls.externalUrls.spotify)} className='flex flex-col relative h-full w-full items-center justify-center text-center bg-neutral-950 bg-opacity-50'>
+                        <div onClick={() => handleLink(album.externalUrls.externalUrls.spotify)} className='flex flex-col relative h-full w-full items-center justify-center text-center bg-neutral-950 bg-opacity-50 p-2'>
                             <h1 className="text-lg text-center line-clamp-3 font-semibold uppercase text-white">{album.name}</h1>
                             <span className="absolute bottom-0 right-0 text-lg text-white p-2">R$ {album.value}</span>
                         </div>
