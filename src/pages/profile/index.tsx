@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { album_api } from '@/services/apiServices';
 import { albumModel } from "@/models/albumModel";
+import { userModel } from "@/models/userModel";
 import { useAuth } from "@/context/authContext";
 
 import LinkWithoutStyle from "@/components/linkWithoutStyle";
@@ -37,6 +38,7 @@ import LogoutIcon from "@/assets/logoutIcon.svg";
 
 export default function index() {
   const [albums, setAlbums] = useState<albumModel[]>([]);
+  const [users, setUser] = useState<userModel>();
 
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -44,7 +46,10 @@ export default function index() {
   const plugin = React.useRef(Autoplay({ delay: 4000, stopOnInteraction: false }));
 
   useEffect(() => {
-    album_api.defaults.headers.common.Authorization = "Basic dGVzdDokMmEkMTAkRUJmVThDSmx2SVNDZ2thYS5td1hFdUYydWJvRDZON29peXNOS0xaSy5IcWI0ZVg1LnIzLzI";
+    const userStorageData = localStorage.getItem('@Auth.Data');
+    setUser(userStorageData!=null ? JSON.parse(userStorageData) : null);
+
+    album_api.defaults.headers.common.Authorization = localStorage.getItem('@Auth.Token');
     album_api.get("albums/all?search=Rock")
       .then(resp => {
           setAlbums(resp.data);
@@ -94,11 +99,11 @@ export default function index() {
                 Carteira
               </LinkWithoutStyle>
 
-              {/* DROPDOWN TOPZERA */}
+              {/* DROPDOWN */}
               <DropdownMenu>
                 <DropdownMenuTrigger className="bg-[url('./assets/logo_profile.jpg')] bg-no-repeat bg-cover w-[50px] h-[50px] rounded-full"></DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuLabel>Logado como </DropdownMenuLabel>
+                  {users?.name && (<DropdownMenuLabel>Logado como  {users.name} </DropdownMenuLabel>)}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="cursor-pointer" onClick={()=>handleLogout()}>
                     <img src={LogoutIcon} className="mr-2 h-4 w-4" />
@@ -106,7 +111,7 @@ export default function index() {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              {/* DROPDOWN TOPZERA */}
+              {/* DROPDOWN */}
             </div>
           </nav>
 
@@ -161,7 +166,7 @@ export default function index() {
                           className='flex aspect-square w-30 bg-[image:var(--bg-wallpaperAlbum)] bg-center bg-cover bg-no-repeat rounded-md shadow-[0_3px_19px_0_rgba(255,255,255,0.1)]'
                       >
                         <div onClick={() => handleLink(album.externalUrls.externalUrls.spotify)} className='flex h-full w-full items-center justify-center bg-neutral-950 bg-opacity-30 p-2'>
-                            <h1 className="text-lg lg:text-2xl font-semibold uppercase text-center text-white">{album.name}</h1>
+                            <h1 className="text-center text-lg font-semibold uppercase text-white">{album.name}</h1>
                         </div>
                       </div>
                     </CarouselItem>

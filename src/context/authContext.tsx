@@ -1,8 +1,8 @@
-import { user_api } from "@/services/apiServices";
-import { UserModel } from "@/models/userModel";
+import { user_api, album_api } from "@/services/apiServices";
+import { userModel } from "@/models/userModel";
 import { createContext, useCallback, useContext, useState } from "react";
 
-interface AuthContextModel extends UserModel {
+interface AuthContextModel extends userModel {
     isAuthenticated: boolean;
     login: (email: string, password: string) => Promise<string | void>;
     logout: () => Promise<void>;
@@ -14,7 +14,8 @@ interface Props {
 
 
 export const AuthProvider: React.FC<Props> = ({ children }) => {
-    const [userData, setUserData] = useState<UserModel>();
+    const [userData, setUserData] = useState<userModel>();
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
     const Login = useCallback(async (email: string, password: string) => {
         const respAuth = await user_api.post('/users/auth', {email, password});
@@ -31,13 +32,18 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         }
         
         setUserData(respUserInfo.data);
-
         localStorage.setItem('@Auth.Data', JSON.stringify(respUserInfo.data));
+        localStorage.setItem('@Auth.Token', `Basic ${respAuth.data.token}`);
+        setIsAuthenticated(true)
     }, []);
 
     const Logout = useCallback(async () => {
         localStorage.removeItem('@Auth.Data');
+        localStorage.removeItem('@Auth.Token');
         setUserData(undefined);
+        setIsAuthenticated(false);
+        user_api.defaults.headers.common.Authorization = null;
+        album_api.defaults.headers.common.Authorization = null;
     }, []);
     
     return (
