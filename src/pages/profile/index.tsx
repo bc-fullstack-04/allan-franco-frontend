@@ -165,8 +165,9 @@ export default function index() {
                           style={{'--bg-wallpaperAlbum': `url(${album.images[0].url})`} as React.CSSProperties}
                           className='flex aspect-square w-30 bg-[image:var(--bg-wallpaperAlbum)] bg-center bg-cover bg-no-repeat rounded-md shadow-[0_3px_19px_0_rgba(255,255,255,0.1)]'
                       >
-                        <div onClick={() => handleLink(album.externalUrls.externalUrls.spotify)} className='flex h-full w-full items-center justify-center bg-neutral-950 bg-opacity-30 p-2'>
+                        <div onClick={() => handleLink(album.externalUrls.externalUrls.spotify)} className='flex relative h-full w-full items-center justify-center bg-neutral-950 bg-opacity-50 p-2'>
                             <h1 className="text-center text-lg font-semibold uppercase text-white">{album.name}</h1>
+                            <span className="absolute bottom-0 right-0 text-lg text-white p-2">R$ {album.value}</span>
                         </div>
                       </div>
                     </CarouselItem>
