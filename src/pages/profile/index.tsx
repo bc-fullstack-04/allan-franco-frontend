@@ -98,6 +98,9 @@ export default function index() {
     <div className={"flex flex-col min-h-screen"}>
       {/* CONTENT + TOPBAR + HEADER */}
       <div className="flex h-[50vh] relative bg-[url('./assets/background_profile.jpg')] bg-center bg-cover bg-no-repeat">
+        {/* BACKDROP */}
+        <div className="w-full h-full absolute top-0 left-0 bg-gradient-to-t from-[#19181F] to-10%"></div>
+        
         {/* MAIN / BODY */}
         <main className="flex flex-col w-full h-full bg-neutral-950 bg-opacity-50">
           {/* TOPBAR */}
@@ -152,10 +155,7 @@ export default function index() {
               </span>
             </div>
           </section>
-        </main>
-
-        {/* BACKDROP */}
-        <div className="w-full h-full absolute top-0 left-0 bg-gradient-to-t from-[#19181F] to-10%"></div>
+        </main>        
       </div>
 
       {/* SEARCH BAR + ALBUMS */}
