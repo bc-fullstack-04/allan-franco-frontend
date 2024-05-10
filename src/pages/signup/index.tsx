@@ -29,7 +29,7 @@ export default function index() {
       toast.success('Registro efetuado com sucesso!');
 
       setTimeout(() => {
-        navigate('/sign-in');
+        navigate('/sign-in', {replace: true});
         setIsSubmitting(false)
       }, 2000)
     }).catch(() => {

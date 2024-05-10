@@ -11,6 +11,7 @@ import { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { useAuth } from '@/context/authContext';
+import { Replace } from 'lucide-react';
 
 export default function index() {
   const { login, createdEmail } = useAuth();
@@ -28,7 +29,7 @@ export default function index() {
       toast.success('Login efetuado com sucesso!');
 
       setTimeout(() => {
-        navigate('/profile');
+        navigate('/profile', {replace: true});
         setIsSubmitting(false)
       }, 2000)
     }).catch(() => {
