@@ -1,6 +1,5 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import { albumModel } from "@/models/albumModel";
 import { exportedAlbumModel } from "@/models/exportedAlbumModel";
 import { userModel } from "@/models/userModel";
 
@@ -142,13 +141,13 @@ export default function index() {
             </section>
 
             {/* ALBUMS */}
-            <section className="flex-1 w-full px-4 sm:px-16 md:px-28 pb-8">
-                <div className="grid  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center justify-center gap-4 rounded-md">
+            <section className="flex-1 w-full px-4 sm:px-16 md:px-28 pb-4">
+                <div className="flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center justify-center gap-4 rounded-md">
                     {albums?.map((album, i) => (
                         <div
                             key={i}
                             style={{"--bg-backgroundAlbum": `url(${album.imageUrl})`,} as React.CSSProperties}
-                            className="aspect-square bg-[image:var(--bg-backgroundAlbum)] bg-cover bg-no-repeat bg-center shadow-[0_3px_19px_0_rgba(255,255,255,0.1)] rounded-md"
+                            className="aspect-square w-full h-full bg-[image:var(--bg-backgroundAlbum)] bg-cover bg-no-repeat bg-center shadow-[0_3px_19px_0_rgba(255,255,255,0.1)] rounded-md"
                         >
                             <div className="relative flex flex-col items-center justify-center h-full w-full bg-neutral-950 bg-opacity-50 rounded-md px-2">
                             <h1 className="text-lg text-center line-clamp-3 font-semibold uppercase text-white">

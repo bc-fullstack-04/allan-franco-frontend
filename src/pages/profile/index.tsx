@@ -48,14 +48,14 @@ export default function index() {
   const [users, setUser] = useState<userModel>();
   const [albums, setAlbums] = useState<albumModel[]>([]);
 
-  const [isSearchingAlbums, setIsSearchingAlbums] = useState(false);
+  const [isSearchingAlbums, setIsSearchingAlbums] = useState(true);
 
   const { logout } = useAuth();
   const { searchAlbums, buyAlbums } = useAlbums();
   const navigate = useNavigate();
 
   const plugin = React.useRef(
-    Autoplay({ delay: 4000, stopOnInteraction: true })
+    Autoplay({ delay: 4000, stopOnInteraction: false })
   );
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function index() {
 
       setIsSearchingAlbums(true);
 
-      const formData = new FormData(e.target as HTMLFormElement) ;
+      const formData = new FormData(e.target as HTMLFormElement);
       const objectInput = Object.fromEntries(formData);
       search = JSON.stringify(objectInput.search);
     } else {
@@ -140,7 +140,11 @@ export default function index() {
 
             {/* ACTION BUTTONS */}
             <div className="flex items-center justify-end w-96 gap-2 sm:gap-8">
-              <LinkWithoutStyle path="/profile/my-albums" textColor="text-white" hover={true}>
+              <LinkWithoutStyle
+                path="/profile/my-albums"
+                textColor="text-white"
+                hover={true}
+              >
                 Meus Discos
               </LinkWithoutStyle>
               <LinkWithoutStyle path="" textColor="text-white" hover={true}>
@@ -221,10 +225,17 @@ export default function index() {
                 >
                   <CarouselContent className="">
                     {albums?.map((album, i) => (
-                      <CarouselItem key={i} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
+                      <CarouselItem
+                        key={i}
+                        className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5"
+                      >
                         <Dialog>
                           <DialogTrigger
-                            style={{"--bg-backgroundAlbum": `url(${album.images[0].url})`} as React.CSSProperties}
+                            style={
+                              {
+                                "--bg-backgroundAlbum": `url(${album.images[0].url})`,
+                              } as React.CSSProperties
+                            }
                             className="relative flex h-full w-full aspect-square bg-[image:var(--bg-backgroundAlbum)] bg-center bg-cover bg-no-repeat rounded-md shadow-[0_3px_19px_0_rgba(255,255,255,0.1)]"
                           >
                             <div className="relative flex flex-col items-center justify-center h-full w-full bg-neutral-950 bg-opacity-50 rounded-md px-2">
@@ -239,7 +250,10 @@ export default function index() {
                           <DialogContent className="w-[75%] sm:flex sm:min-w-fit sm:w-full h-auto p-0">
                             {/* IMAGE */}
                             <DialogHeader className="h-full w-full">
-                              <img src={album.images[0].url} className="h-full w-full rounded-md" />
+                              <img
+                                src={album.images[0].url}
+                                className="h-full w-full rounded-md"
+                              />
                             </DialogHeader>
                             {/* CONTENT */}
                             <DialogHeader className="flex flex-col min-h-full sm:min-w-[40%] items-center justify-between p-4">
@@ -248,33 +262,51 @@ export default function index() {
                               </DialogTitle>
                               <ul className="flex flex-col w-full py-4 gap-2">
                                 <li className="flex flex-col text-start">
-                                  <DialogDescription><b>Nome do album</b></DialogDescription>
-                                  <DialogDescription>{album.name}</DialogDescription>
+                                  <DialogDescription>
+                                    <b>Nome do album</b>
+                                  </DialogDescription>
+                                  <DialogDescription>
+                                    {album.name}
+                                  </DialogDescription>
                                 </li>
                                 <li className="flex flex-col text-start">
-                                  <DialogDescription><b>Data de lançamento</b></DialogDescription>
-                                  <DialogDescription>{handleDate(album.releaseDate)}</DialogDescription>
+                                  <DialogDescription>
+                                    <b>Data de lançamento</b>
+                                  </DialogDescription>
+                                  <DialogDescription>
+                                    {handleDate(album.releaseDate)}
+                                  </DialogDescription>
                                 </li>
                                 <li className="flex flex-col text-start">
-                                  <DialogDescription><b>Link do album</b></DialogDescription>
-                                  <DialogDescription><a
-                                    className="hover:underline"
-                                    target="_blank"
-                                    href={album.externalUrls.externalUrls.spotify}
+                                  <DialogDescription>
+                                    <b>Link do album</b>
+                                  </DialogDescription>
+                                  <DialogDescription>
+                                    <a
+                                      className="hover:underline"
+                                      target="_blank"
+                                      href={
+                                        album.externalUrls.externalUrls.spotify
+                                      }
                                     >
-                                    Clique aqui
-                                  </a></DialogDescription>
+                                      Clique aqui
+                                    </a>
+                                  </DialogDescription>
                                 </li>
                                 <li className="flex flex-col text-start">
-                                  <DialogDescription><b>Valor</b></DialogDescription>
-                                  <DialogDescription>R$ {album.value}</DialogDescription>
+                                  <DialogDescription>
+                                    <b>Valor</b>
+                                  </DialogDescription>
+                                  <DialogDescription>
+                                    R$ {album.value}
+                                  </DialogDescription>
                                 </li>
                               </ul>
                               <ButtonWithStyle
                                 onClick={() => handleBuyAlbums(album)}
                                 disabled={false}
                                 bgColor="bg-amber-600 hover:bg-amber-500"
-                                >
+                              >
                                 Comprar
                               </ButtonWithStyle>
                             </DialogHeader>
@@ -289,7 +321,7 @@ export default function index() {
               </div>
             </div>
           ) : (
-            <div className="flex grow flex-wrap items-center justify-center gap-4 rounded-md px-4 sm:px-16 md:px-32 lg:px-48">
+            <div className="flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center justify-center gap-4 rounded-md px-4 sm:px-16 md:px-32 lg:px-48">
               {albums?.map((album, i) => (
                 <Dialog key={i}>
                   <DialogTrigger
@@ -298,7 +330,7 @@ export default function index() {
                         "--bg-backgroundAlbum": `url(${album.images[0].url})`,
                       } as React.CSSProperties
                     }
-                    className="grow basis-1/3 md:basis-1/4 lg:basis-1/5 bg-[image:var(--bg-backgroundAlbum)] bg-cover bg-no-repeat bg-center aspect-square shadow-[0_3px_19px_0_rgba(255,255,255,0.1)] rounded-md"
+                    className="aspect-square w-full h-full bg-[image:var(--bg-backgroundAlbum)] bg-cover bg-no-repeat bg-center  shadow-[0_3px_19px_0_rgba(255,255,255,0.1)] rounded-md"
                   >
                     <div className="relative flex flex-col items-center justify-center h-full w-full bg-neutral-950 bg-opacity-50 rounded-md px-2">
                       <h1 className="text-lg text-center line-clamp-3 font-semibold uppercase text-white">
@@ -310,49 +342,65 @@ export default function index() {
                     </div>
                   </DialogTrigger>
                   <DialogContent className="w-[75%] sm:flex sm:min-w-fit sm:w-full h-auto p-0">
-                      {/* IMAGE */}
-                      <DialogHeader className="h-full w-full">
-                        <img src={album.images[0].url} className="h-full w-full rounded-md" />
-                      </DialogHeader>
-                      {/* CONTENT */}
-                      <DialogHeader className="flex-col sm:min-w-[40%] items-center justify-between p-4">
-                        <DialogTitle className="capitalize">
-                          {album.artists[0].name}
-                        </DialogTitle>
-                        <ul className="flex flex-col w-full py-4 gap-2">
-                          <li className="flex flex-col text-start">
-                            <DialogDescription><b>Nome do album</b></DialogDescription>
-                            <DialogDescription>{album.name}</DialogDescription>
-                          </li>
-                          <li className="flex flex-col text-start">
-                            <DialogDescription><b>Data de lançamento</b></DialogDescription>
-                            <DialogDescription>{handleDate(album.releaseDate)}</DialogDescription>
-                          </li>
-                          <li className="flex flex-col text-start">
-                            <DialogDescription><b>Link do album</b></DialogDescription>
-                            <DialogDescription><a
+                    {/* IMAGE */}
+                    <DialogHeader className="h-full w-full">
+                      <img
+                        src={album.images[0].url}
+                        className="h-full w-full rounded-md"
+                      />
+                    </DialogHeader>
+                    {/* CONTENT */}
+                    <DialogHeader className="flex-col sm:min-w-[40%] items-center justify-between p-4">
+                      <DialogTitle className="capitalize">
+                        {album.artists[0].name}
+                      </DialogTitle>
+                      <ul className="flex flex-col w-full py-4 gap-2">
+                        <li className="flex flex-col text-start">
+                          <DialogDescription>
+                            <b>Nome do album</b>
+                          </DialogDescription>
+                          <DialogDescription>{album.name}</DialogDescription>
+                        </li>
+                        <li className="flex flex-col text-start">
+                          <DialogDescription>
+                            <b>Data de lançamento</b>
+                          </DialogDescription>
+                          <DialogDescription>
+                            {handleDate(album.releaseDate)}
+                          </DialogDescription>
+                        </li>
+                        <li className="flex flex-col text-start">
+                          <DialogDescription>
+                            <b>Link do album</b>
+                          </DialogDescription>
+                          <DialogDescription>
+                            <a
                               className="hover:underline"
                               target="_blank"
                               href={album.externalUrls.externalUrls.spotify}
-                              >
+                            >
                               Clique aqui
-                            </a></DialogDescription>
-                          </li>
-                          <li className="flex flex-col text-start">
-                            <DialogDescription><b>Valor</b></DialogDescription>
-                            <DialogDescription>R$ {album.value}</DialogDescription>
-                          </li>
-                        </ul>
-                        <ButtonWithStyle
-                          onClick={() => handleBuyAlbums(album)}
-                          disabled={false}
-                          bgColor="bg-amber-600 hover:bg-amber-500"
-                          >
-                          Comprar
-                        </ButtonWithStyle>
-                        <DialogDescription className="w-full">
-                        </DialogDescription>
-                      </DialogHeader>
+                            </a>
+                          </DialogDescription>
+                        </li>
+                        <li className="flex flex-col text-start">
+                          <DialogDescription>
+                            <b>Valor</b>
+                          </DialogDescription>
+                          <DialogDescription>
+                            R$ {album.value}
+                          </DialogDescription>
+                        </li>
+                      </ul>
+                      <ButtonWithStyle
+                        onClick={() => handleBuyAlbums(album)}
+                        disabled={false}
+                        bgColor="bg-amber-600 hover:bg-amber-500"
+                      >
+                        Comprar
+                      </ButtonWithStyle>
+                      <DialogDescription className="w-full"></DialogDescription>
+                    </DialogHeader>
                   </DialogContent>
                 </Dialog>
               ))}
