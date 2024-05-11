@@ -1,10 +1,10 @@
 import { album_api } from "@/services/apiServices";
 import { albumModel } from "@/models/albumModel";
-import { createContext, useCallback, useContext, useState } from "react";
-import toast from "react-hot-toast";
+import { createContext, useCallback, useContext } from "react";
 
 interface AlbumContextModel {
     searchAlbums: (search: string) => Promise<albumModel[]>;
+    buyAlbums: (name:string, idSpotify:string, artistName:string, imageUrl:string, value:number) => Promise<String | void>;
 }
 
 interface Props {
@@ -26,10 +26,13 @@ export const AlbumProvider: React.FC<Props> = ({ children }) => {
         return respAlbum.data;
     }, []);
 
+    const buyAlbums = useCallback(async (name:string, idSpotify:string, artistName:string, imageUrl:string, value:number) => {
+        await album_api.post('/sale', {name, idSpotify, artistName, imageUrl, value});
+    }, [])
+
     return (
-        <AlbumContext.Provider value={{ searchAlbums }}>{children}</AlbumContext.Provider>
+        <AlbumContext.Provider value={{ searchAlbums, buyAlbums }}>{children}</AlbumContext.Provider>
     )
-    
 }
 
 export const useAlbums = () => useContext(AlbumContext);

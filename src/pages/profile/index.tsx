@@ -32,7 +32,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+// SHADCN DIALOG / MODAL
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 import LogoutIcon from "@/assets/logoutIcon.svg";
+import ButtonWithStyle from "@/components/buttonWithStyle";
 
 export default function index() {
   const [users, setUser] = useState<userModel>();
@@ -41,11 +52,11 @@ export default function index() {
   const [isSearchingAlbums, setIsSearchingAlbums] = useState(false);
 
   const { logout } = useAuth();
-  const { searchAlbums } = useAlbums();
+  const { searchAlbums, buyAlbums } = useAlbums();
   const navigate = useNavigate();
 
   const plugin = React.useRef(
-    Autoplay({ delay: 4000, stopOnInteraction: false })
+    Autoplay({ delay: 4000, stopOnInteraction: true })
   );
 
   useEffect(() => {
@@ -57,7 +68,7 @@ export default function index() {
 
   async function handleAlbums(e?: FormEvent) {
     let search: string;
-  
+
     if (e) {
       e.preventDefault();
 
@@ -67,11 +78,27 @@ export default function index() {
       const objectInput = Object.fromEntries(formData);
       search = JSON.stringify(objectInput.search);
     } else {
-      search = 'Rock';
+      search = "Rock";
     }
-  
+
     const results = await searchAlbums(search);
     setAlbums(results);
+  }
+
+  async function handleBuyAlbums(album: albumModel) {
+    await buyAlbums(
+      album.name,
+      album.id,
+      album.artists[0].name,
+      album.images[0].url,
+      album.value
+    )
+      .then(() => {
+        toast.success("Album comprado");
+      })
+      .catch(() => {
+        toast.error("Album já comprado");
+      });
   }
 
   async function handleLogout() {
@@ -93,6 +120,12 @@ export default function index() {
     window.open(url, "_blank");
   }
 
+  function handleDate(date: string) {
+    const [year, month, day] = date.split("-");
+    const formattedDate = `${day}/${month}/${year}`;
+    return formattedDate;
+  }
+
   return (
     // MAIN / BODY
     <div className={"flex flex-col min-h-screen"}>
@@ -100,7 +133,6 @@ export default function index() {
       <div className="flex h-[50vh] relative bg-[url('./assets/background_profile.jpg')] bg-center bg-cover bg-no-repeat">
         {/* BACKDROP */}
         <div className="w-full h-full absolute top-0 left-0 bg-gradient-to-t from-[#19181F] to-10%"></div>
-        
         {/* MAIN / BODY */}
         <main className="flex flex-col w-full h-full bg-neutral-950 bg-opacity-50">
           {/* TOPBAR */}
@@ -155,14 +187,14 @@ export default function index() {
               </span>
             </div>
           </section>
-        </main>        
+        </main>
       </div>
 
       {/* SEARCH BAR + ALBUMS */}
-      <div className="flex grow items-center justify-center bg-[#19181F]">
-        <div className="flex flex-col gap-8 w-full px-4 sm:px-28 xl:px-48 py-4">
+      <div className="flex-1 items-center justify-center bg-[#19181F]">
+        <div className="flex flex-col gap-8 py-4">
           {/* SEARCH BAR */}
-          <div className="flex justify-center items-center w-full">
+          <div className="flex justify-center items-center w-full px-4">
             <form
               onSubmit={handleAlbums}
               className="flex items-center justify-end h-full w-full sm:w-96 relative"
@@ -182,7 +214,7 @@ export default function index() {
 
           {/* ALBUMS */}
           {!isSearchingAlbums ? (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 px-16 sm:px-32 md:px-48 lg:px-60">
               <h1 className="text-4xl text-white">Trends</h1>
 
               <div className="flex w-full items-center justify-center">
@@ -194,35 +226,65 @@ export default function index() {
                 >
                   <CarouselContent className="">
                     {albums?.map((album, i) => (
-                      <CarouselItem
-                        key={i}
-                        className="basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5 "
-                      >
-                        <div
-                          key={i}
-                          style={
-                            {
-                              "--bg-wallpaperAlbum": `url(${album.images[0].url})`,
-                            } as React.CSSProperties
-                          }
-                          className="flex aspect-square w-30 bg-[image:var(--bg-wallpaperAlbum)] bg-center bg-cover bg-no-repeat rounded-md shadow-[0_3px_19px_0_rgba(255,255,255,0.1)]"
-                        >
-                          <div
-                            onClick={() =>
-                              handleLink(
-                                album.externalUrls.externalUrls.spotify
-                              )
-                            }
-                            className="flex flex-col relative h-full w-full items-center justify-center text-center bg-neutral-950 bg-opacity-50 p-2 rounded-md"
+                      <CarouselItem key={i} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
+                        <Dialog>
+                          <DialogTrigger
+                            style={{"--bg-backgroundAlbum": `url(${album.images[0].url})`} as React.CSSProperties}
+                            className="relative flex h-full w-full aspect-square bg-[image:var(--bg-backgroundAlbum)] bg-center bg-cover bg-no-repeat rounded-md shadow-[0_3px_19px_0_rgba(255,255,255,0.1)]"
                           >
-                            <h1 className="text-lg text-center line-clamp-3 font-semibold uppercase text-white">
-                              {album.name}
-                            </h1>
-                            <span className="absolute bottom-0 right-0 text-lg text-white p-2">
-                              R$ {album.value}
-                            </span>
-                          </div>
-                        </div>
+                            <div className="relative flex flex-col items-center justify-center h-full w-full bg-neutral-950 bg-opacity-50 rounded-md px-2">
+                              <h1 className="text-lg text-center line-clamp-3 font-semibold uppercase text-white">
+                                {album.artists[0].name}
+                              </h1>
+                              <span className="absolute bottom-0 right-0 text-lg text-white p-2">
+                                R$ {album.value}
+                              </span>
+                            </div>
+                          </DialogTrigger>
+                          <DialogContent className="w-[75%] sm:flex sm:min-w-fit sm:w-full h-auto p-0">
+                            {/* IMAGE */}
+                            <DialogHeader className="h-full w-full">
+                              <img src={album.images[0].url} className="h-full w-full rounded-md" />
+                            </DialogHeader>
+                            {/* CONTENT */}
+                            <DialogHeader className="flex flex-col min-h-full sm:min-w-[40%] items-center justify-between p-4">
+                              <DialogTitle className="capitalize">
+                                {album.artists[0].name}
+                              </DialogTitle>
+                              <ul className="flex flex-col w-full py-4 gap-2">
+                                <li className="flex flex-col text-start">
+                                  <DialogDescription><b>Nome do album</b></DialogDescription>
+                                  <DialogDescription>{album.name}</DialogDescription>
+                                </li>
+                                <li className="flex flex-col text-start">
+                                  <DialogDescription><b>Data de lançamento</b></DialogDescription>
+                                  <DialogDescription>{handleDate(album.releaseDate)}</DialogDescription>
+                                </li>
+                                <li className="flex flex-col text-start">
+                                  <DialogDescription><b>Link do album</b></DialogDescription>
+                                  <DialogDescription><a
+                                    className="hover:underline"
+                                    target="_blank"
+                                    href={album.externalUrls.externalUrls.spotify}
+                                    >
+                                    Clique aqui
+                                  </a></DialogDescription>
+                                </li>
+                                <li className="flex flex-col text-start">
+                                  <DialogDescription><b>Valor</b></DialogDescription>
+                                  <DialogDescription>R$ {album.value}</DialogDescription>
+                                </li>
+                              </ul>
+                              <ButtonWithStyle
+                                onClick={() => handleBuyAlbums(album)}
+                                disabled={false}
+                                bgColor="bg-amber-600 hover:bg-amber-500"
+                                >
+                                Comprar
+                              </ButtonWithStyle>
+                            </DialogHeader>
+                          </DialogContent>
+                        </Dialog>
                       </CarouselItem>
                     ))}
                   </CarouselContent>
@@ -232,20 +294,72 @@ export default function index() {
               </div>
             </div>
           ) : (
-            <div className="flex grow w-full h-full flex-wrap items-center justify-center gap-4 rounded-md">
+            <div className="flex grow flex-wrap items-center justify-center gap-4 rounded-md px-4 sm:px-16 md:px-32 lg:px-48">
               {albums?.map((album, i) => (
-                  <div
-                    key={i}
-                    style={{ "--bg-backgroundAlbum": `url(${album.images[0].url})`} as React.CSSProperties}
-                    className="relative grow basis-1/3 md:basis-1/4 lg:basis-1/5 bg-[image:var(--bg-backgroundAlbum)] bg-cover bg-no-repeat bg-center aspect-square shadow-[0_3px_19px_0_rgba(255,255,255,0.1)] rounded-md"
-                    >
-                      <div className='flex flex-col items-center justify-center h-full w-full bg-neutral-950 bg-opacity-50 rounded-md'>
-                        <div className=" ">
-                          <h1 className="text-lg text-center line-clamp-3 font-semibold uppercase text-white">{album.name}</h1>
-                          <span className="absolute bottom-0 right-0 text-lg text-white p-2">R$ {album.value}</span>
-                        </div>
-                      </div>
+                <Dialog key={i}>
+                  <DialogTrigger
+                    style={
+                      {
+                        "--bg-backgroundAlbum": `url(${album.images[0].url})`,
+                      } as React.CSSProperties
+                    }
+                    className="grow basis-1/3 md:basis-1/4 lg:basis-1/5 bg-[image:var(--bg-backgroundAlbum)] bg-cover bg-no-repeat bg-center aspect-square shadow-[0_3px_19px_0_rgba(255,255,255,0.1)] rounded-md"
+                  >
+                    <div className="relative flex flex-col items-center justify-center h-full w-full bg-neutral-950 bg-opacity-50 rounded-md px-2">
+                      <h1 className="text-lg text-center line-clamp-3 font-semibold uppercase text-white">
+                        {album.artists[0].name}
+                      </h1>
+                      <span className="absolute bottom-0 right-0 text-lg text-white p-2">
+                        R$ {album.value}
+                      </span>
                     </div>
+                  </DialogTrigger>
+                  <DialogContent className="w-[75%] sm:flex sm:min-w-fit sm:w-full h-auto p-0">
+                      {/* IMAGE */}
+                      <DialogHeader className="h-full w-full">
+                        <img src={album.images[0].url} className="h-full w-full rounded-md" />
+                      </DialogHeader>
+                      {/* CONTENT */}
+                      <DialogHeader className="flex-col sm:min-w-[40%] items-center justify-between p-4">
+                        <DialogTitle className="capitalize">
+                          {album.artists[0].name}
+                        </DialogTitle>
+                        <ul className="flex flex-col w-full py-4 gap-2">
+                          <li className="flex flex-col text-start">
+                            <DialogDescription><b>Nome do album</b></DialogDescription>
+                            <DialogDescription>{album.name}</DialogDescription>
+                          </li>
+                          <li className="flex flex-col text-start">
+                            <DialogDescription><b>Data de lançamento</b></DialogDescription>
+                            <DialogDescription>{handleDate(album.releaseDate)}</DialogDescription>
+                          </li>
+                          <li className="flex flex-col text-start">
+                            <DialogDescription><b>Link do album</b></DialogDescription>
+                            <DialogDescription><a
+                              className="hover:underline"
+                              target="_blank"
+                              href={album.externalUrls.externalUrls.spotify}
+                              >
+                              Clique aqui
+                            </a></DialogDescription>
+                          </li>
+                          <li className="flex flex-col text-start">
+                            <DialogDescription><b>Valor</b></DialogDescription>
+                            <DialogDescription>R$ {album.value}</DialogDescription>
+                          </li>
+                        </ul>
+                        <ButtonWithStyle
+                          onClick={() => handleBuyAlbums(album)}
+                          disabled={false}
+                          bgColor="bg-amber-600 hover:bg-amber-500"
+                          >
+                          Comprar
+                        </ButtonWithStyle>
+                        <DialogDescription className="w-full">
+                        </DialogDescription>
+                      </DialogHeader>
+                  </DialogContent>
+                </Dialog>
               ))}
               {/* Card */}
             </div>
