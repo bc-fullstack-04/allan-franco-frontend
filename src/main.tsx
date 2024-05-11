@@ -11,6 +11,7 @@ import Home from './pages/home/index'
 import SignIn from './pages/signin/index'
 import SignUp from './pages/signup/index'
 import Profile from './pages/profile/index'
+import MyAlbums from './pages/myAlbums'
 
 import '../app/globals.css'
 import './globals.css'
@@ -30,6 +31,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Route path="/sign-up" element={<SignUp />}/>
             <Route path='' element={<PrivateRoute />}>
               <Route path="/profile" element={<Profile />}/>
+              <Route path="/profile/my-albums" element={<MyAlbums />}/>
             </Route>
           </Routes>
         </BrowserRouter>

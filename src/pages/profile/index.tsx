@@ -1,6 +1,5 @@
 import React, { FormEvent, useEffect, useState } from "react";
 
-// import { album_api } from '@/services/apiServices';
 import { albumModel } from "@/models/albumModel";
 import { userModel } from "@/models/userModel";
 import { useAuth } from "@/context/authContext";
@@ -74,7 +73,7 @@ export default function index() {
 
       setIsSearchingAlbums(true);
 
-      const formData = new FormData(e.target);
+      const formData = new FormData(e.target as HTMLFormElement) ;
       const objectInput = Object.fromEntries(formData);
       search = JSON.stringify(objectInput.search);
     } else {
@@ -107,17 +106,13 @@ export default function index() {
     logout()
       .then(() => {
         setTimeout(() => {
-          navigate("/");
+          navigate("/", { replace: true });
           toast.success("Logout efetuado com sucesso!");
         }, 2000);
       })
       .catch(() => {
         toast.error("Erro ao sair. Tente novamente mais tarde!");
       });
-  }
-
-  function handleLink(url: string) {
-    window.open(url, "_blank");
   }
 
   function handleDate(date: string) {
@@ -145,7 +140,7 @@ export default function index() {
 
             {/* ACTION BUTTONS */}
             <div className="flex items-center justify-end w-96 gap-2 sm:gap-8">
-              <LinkWithoutStyle path="" textColor="text-white" hover={true}>
+              <LinkWithoutStyle path="/profile/my-albums" textColor="text-white" hover={true}>
                 Meus Discos
               </LinkWithoutStyle>
               <LinkWithoutStyle path="" textColor="text-white" hover={true}>
@@ -361,7 +356,6 @@ export default function index() {
                   </DialogContent>
                 </Dialog>
               ))}
-              {/* Card */}
             </div>
           )}
         </div>

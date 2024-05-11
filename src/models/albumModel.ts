@@ -8,7 +8,6 @@ export class albumModel{
     releaseDate: string
     type: string
     value: number
-    genres: string[]
 }
 
 type Artists = {
