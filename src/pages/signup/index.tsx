@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import { Link, useNavigate } from "react-router-dom";
 import { FormEvent, useState } from 'react';
 import { useAuth } from '@/context/authContext';
+import Sign from '@/components/sign';
 
 export default function index() {
   const [name, setName] = useState("");
@@ -45,20 +46,7 @@ export default function index() {
       {/* MAIN / BODY */}
       <main className="flex flex-col absolute w-screen h-screen backdrop-brightness-50 backdrop-blur-sm">
         <section className="flex flex-row items-center justify-center h-full w-full">
-          {/* CONTENT */}
-          <div className="flex flex-col items-center justify-center relative bg-white w-[420px] h-fit rounded-3xl shadow-lg px-12 py-4">
-            
-            {/* CLOSE BUTTON */}
-            <div className="flex items-center justify-end w-full h-fit">
-              <Link to="/" className="absolute top-0 right-0 p-4"><img src={CloseButton} alt="Close Button" className="p-1 bg-zinc-50 hover:bg-zinc-100 rounded-full" /></Link>
-            </div>
-
-            {/* TITLE */}
-            <div className="flex flex-col items-center gap-2 w-full py-6">
-              <Logo />
-              <h1 className="text-2xl font-medium">Criar conta</h1>
-            </div>
-
+          <Sign title='Criar conta'>
             {/* FORMS */}
             <form onSubmit={handleRegister} className="flex flex-col items-center mb-8 gap-4 w-full">
               <Input onChange={e => setName(e.target.value)} type="text" required>
@@ -87,7 +75,7 @@ export default function index() {
               </p>
             </div>
             )}
-          </div>
+          </Sign>
         </section>
       </main>
     </div>

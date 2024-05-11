@@ -2,13 +2,8 @@ import React, { FormEvent, useEffect, useState } from "react";
 
 import { albumModel } from "@/models/albumModel";
 import { userModel } from "@/models/userModel";
-import { useAuth } from "@/context/authContext";
 import { useAlbums } from "@/context/albumContext";
 
-import LinkWithoutStyle from "@/components/linkWithoutStyle";
-import Logo from "@/components/logo";
-
-import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 // SHADCN CAROUSEL
@@ -21,15 +16,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-// SHADCN DROPDOWN MENU
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 // SHADCN DIALOG / MODAL
 import {
@@ -41,8 +27,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import LogoutIcon from "@/assets/logoutIcon.svg";
 import ButtonWithStyle from "@/components/buttonWithStyle";
+import TopBar from "@/components/topBar";
 
 export default function index() {
   const [users, setUser] = useState<userModel>();
@@ -50,9 +36,7 @@ export default function index() {
 
   const [isSearchingAlbums, setIsSearchingAlbums] = useState(true);
 
-  const { logout } = useAuth();
   const { searchAlbums, buyAlbums } = useAlbums();
-  const navigate = useNavigate();
 
   const plugin = React.useRef(
     Autoplay({ delay: 4000, stopOnInteraction: false })
@@ -100,21 +84,6 @@ export default function index() {
       });
   }
 
-  async function handleLogout() {
-    toast.loading("Saindo...");
-
-    logout()
-      .then(() => {
-        setTimeout(() => {
-          navigate("/", { replace: true });
-          toast.success("Logout efetuado com sucesso!");
-        }, 2000);
-      })
-      .catch(() => {
-        toast.error("Erro ao sair. Tente novamente mais tarde!");
-      });
-  }
-
   function handleDate(date: string) {
     const [year, month, day] = date.split("-");
     const formattedDate = `${day}/${month}/${year}`;
@@ -127,52 +96,11 @@ export default function index() {
       {/* CONTENT + TOPBAR + HEADER */}
       <div className="flex h-[50vh] relative bg-[url('./assets/background_profile.jpg')] bg-center bg-cover bg-no-repeat">
         {/* BACKDROP */}
-        <div className="w-full h-full absolute top-0 left-0 bg-gradient-to-t from-[#19181F] to-10%"></div>
+        <div className="w-full h-full absolute bg-gradient-to-t from-[#19181F] to-10%"></div>
         {/* MAIN / BODY */}
         <main className="flex flex-col w-full h-full bg-neutral-950 bg-opacity-50">
           {/* TOPBAR */}
-          <nav className="flex flex-row items-center justify-between w-full bg-white bg-opacity-30 backdrop-blur-sm py-3 px-4 lg:px-16">
-            {/* LOGO && TITLE */}
-            <div className="flex items-center">
-              <Logo />
-              <h1 className="text-white text-xl">BootPlay</h1>
-            </div>
-
-            {/* ACTION BUTTONS */}
-            <div className="flex items-center justify-end w-96 gap-2 sm:gap-8">
-              <LinkWithoutStyle
-                path="/profile/my-albums"
-                textColor="text-white"
-                hover={true}
-              >
-                Meus Discos
-              </LinkWithoutStyle>
-              <LinkWithoutStyle path="" textColor="text-white" hover={true}>
-                Carteira
-              </LinkWithoutStyle>
-
-              {/* DROPDOWN */}
-              <DropdownMenu>
-                <DropdownMenuTrigger className="bg-[url('./assets/logo_profile.jpg')] bg-no-repeat bg-cover w-[50px] h-[50px] rounded-full"></DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  {users?.name && (
-                    <DropdownMenuLabel className="capitalize">
-                      {users.name}{" "}
-                    </DropdownMenuLabel>
-                  )}
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    className="cursor-pointer"
-                    onClick={() => handleLogout()}
-                  >
-                    <img src={LogoutIcon} className="mr-2 h-4 w-4" />
-                    <span>Sair</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              {/* DROPDOWN */}
-            </div>
-          </nav>
+          <TopBar homePage={false} userName={users?.name} />
 
           {/* CONTENT */}
           <section className="flex flex-col h-full justify-center gap-8 p-4">

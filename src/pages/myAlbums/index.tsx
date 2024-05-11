@@ -3,39 +3,21 @@ import React, { useEffect, useState } from "react";
 import { exportedAlbumModel } from "@/models/exportedAlbumModel";
 import { userModel } from "@/models/userModel";
 
-import { useAuth } from "@/context/authContext";
 import { useAlbums } from "@/context/albumContext";
 
-import LinkWithoutStyle from "@/components/linkWithoutStyle";
-import Logo from "@/components/logo";
-
-import LogoutIcon from "@/assets/logoutIcon.svg";
-import HomeIcon from "@/assets/homeIcon.svg";
 import TotalAlbumsIcon from "@/assets/totalAlbumsIcon.svg";
 import ValueInvested from "@/assets/valueInvested.svg";
 
-import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-
-// SHADCN DROPDOWN MENU
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import Cards from "@/components/myAlbums/cards";
+import Cards from "@/components/cards";
+import TopBar from "@/components/topBar";
 
 export default function index() {
     const [users, setUser] = useState<userModel>();
     const [albums, setAlbums] = useState<exportedAlbumModel[]>();
 
-    const { logout } = useAuth();
     const { myAlbums } = useAlbums();
-    const navigate = useNavigate();
 
     useEffect(()=>{
         const userStorageData = localStorage.getItem("@Auth.Data");
@@ -49,21 +31,6 @@ export default function index() {
         }).catch(()=>{
             toast.error('Falha no recebimento dos seus albums')
         });
-    }
-
-    async function handleLogout() {
-        toast.loading("Saindo...");
-    
-        logout()
-          .then(() => {
-            setTimeout(() => {
-              navigate("/");
-              toast.success("Logout efetuado com sucesso!");
-            }, 2000);
-          })
-          .catch(() => {
-            toast.error("Erro ao sair. Tente novamente mais tarde!");
-          });
     }
 
     function handleCountAlbums(){
@@ -85,50 +52,7 @@ export default function index() {
         {/* MAIN / BODY */}
         <main className="flex flex-col min-h-screen bg-[#19181F] gap-8">
             {/* TOPBAR */}
-            <nav className="flex flex-row items-center justify-between w-full bg-white bg-opacity-30 backdrop-blur-sm py-3 px-4 lg:px-16">
-            {/* LOGO && TITLE */}
-            <div className="flex items-center">
-                <Logo />
-                <h1 className="text-white text-xl">BootPlay</h1>
-            </div>
-
-            {/* ACTION BUTTONS */}
-            <div className="flex items-center justify-end w-96 gap-2 sm:gap-8">
-                <LinkWithoutStyle path="" textColor="text-white" hover={true}>
-                Meus Discos
-                </LinkWithoutStyle>
-                <LinkWithoutStyle path="" textColor="text-white" hover={true}>
-                Carteira
-                </LinkWithoutStyle>
-
-                {/* DROPDOWN */}
-                <DropdownMenu>
-                <DropdownMenuTrigger className="bg-[url('./assets/logo_profile.jpg')] bg-no-repeat bg-cover w-[50px] h-[50px] rounded-full"></DropdownMenuTrigger>
-                <DropdownMenuContent>
-                    {users?.name && (
-                    <DropdownMenuLabel className="capitalize">
-                        {users.name}{" "}
-                    </DropdownMenuLabel>
-                    )}
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                    className="cursor-pointer"
-                    >
-                    <img src={HomeIcon} className="mr-2 h-4 w-4" />
-                    <Link to="/profile">Home</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                    className="cursor-pointer"
-                    onClick={() => handleLogout()}
-                    >
-                    <img src={LogoutIcon} className="mr-2 h-4 w-4" />
-                    <span>Sair</span>
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-                </DropdownMenu>
-                {/* DROPDOWN */}
-            </div>
-            </nav>
+            <TopBar userName={users?.name} homePage={false} myAlbumsPage={true} />
 
             {/* CONTENT */}
             <section className="flex flex-col h-full items-start justify-center pt-20 px-4 sm:px-28 gap-8">
