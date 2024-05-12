@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import { AuthProvider } from './context/authContext'
+import { AlbumProvider } from './context/albumContext'
+import { WalletProvider } from './context/walletContext'
 
 import PrivateRoute from './utils/privateRoute'
 
@@ -12,29 +14,33 @@ import SignIn from './pages/signin/index'
 import SignUp from './pages/signup/index'
 import Profile from './pages/profile/index'
 import MyAlbums from './pages/myAlbums'
+import Wallet from './pages/wallet'
 
 import '../app/globals.css'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
-import { AlbumProvider } from './context/albumContext'
+
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.Fragment>
     <Toaster position='bottom-right' toastOptions={{ duration: 2000 }} />
     <AuthProvider>
       <AlbumProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="*" element={<NotFound />} />
-            <Route path="/" element={<Home />}/>
-            <Route path="/sign-in" element={<SignIn />}/>
-            <Route path="/sign-up" element={<SignUp />}/>
-            <Route path='' element={<PrivateRoute />}>
-              <Route path="/profile" element={<Profile />}/>
-              <Route path="/profile/my-albums" element={<MyAlbums />}/>
-            </Route>
-          </Routes>
-        </BrowserRouter>
+        <WalletProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="*" element={<NotFound />} />
+              <Route path="/" element={<Home />}/>
+              <Route path="/sign-in" element={<SignIn />}/>
+              <Route path="/sign-up" element={<SignUp />}/>
+              <Route path='' element={<PrivateRoute />}>
+                <Route path="/profile" element={<Profile />}/>
+                <Route path="/profile/my-albums" element={<MyAlbums />}/>
+                <Route path="/profile/wallet" element={<Wallet />}/>
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </WalletProvider>
       </AlbumProvider>
     </AuthProvider>
   </React.Fragment>

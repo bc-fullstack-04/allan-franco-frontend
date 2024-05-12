@@ -61,7 +61,7 @@ export default function topBar({ userName, homePage = true, myAlbumsPage = false
             ) : (
                 <div className="flex items-center justify-end w-96 gap-2 sm:gap-8">
                     <LinkWithoutStyle path="/profile/my-albums" textColor="text-white" hover={true}>Meus Discos</LinkWithoutStyle>
-                    <LinkWithoutStyle path="" textColor="text-white" hover={true}>Carteira</LinkWithoutStyle>
+                    <LinkWithoutStyle path="/profile/wallet" textColor="text-white" hover={true}>Carteira</LinkWithoutStyle>
 
                     {/* DROPDOWN */}
                         <DropdownMenu>
