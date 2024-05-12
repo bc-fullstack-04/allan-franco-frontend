@@ -1,7 +1,8 @@
-# Simple E-Commerce Spotify
-## Made with React, TypeScript and Tailwind
+## Simple E-Commerce Spotify
+### Description
+&ensp; Made with React, TypeScript and Tailwind
 
-#### Requirements
+### Requirements
 - Node v20.11.1.
 
 ### How to run it
